@@ -82,11 +82,11 @@ public class App {
                     
                     sql.append("SELECT COUNT(*)");
                     sql.append("FROM article");
-                    sql.append("WHERE id = ?", id);
+                    sql.append("WHERE id = ?",id);
                     
                     int articlesCount = DBUtil.selectRowIntValue(conn, sql);
                     if(articlesCount == 0) {
-                    	System.out.printf("%d번 글은 존자해지 않습니다.\n", id);
+                    	System.out.printf("%d번 글은 존재하지 않습니다.\n", id);
                     	continue;
                     }
                     
@@ -111,11 +111,50 @@ public class App {
 					
 					System.out.printf("%d번 글이 수정되었습니다\n", id);
 				} else if (cmd.startsWith("article delete")) {
-					System.out.println("== 게시물 삭제 ==");
+					SecSql sql = new SecSql();
 					int id = Integer.parseInt(cmd.split(" ")[2]);
-					
-				}
+					 sql.append("SELECT COUNT(*)");
+	                 sql.append("FROM article");
+	                 sql.append("WHERE id = ?",id);
+	                    
+	                 int articlesCount = DBUtil.selectRowIntValue(conn, sql);
+	                 if(articlesCount == 0) {
+	                    	System.out.printf("%d번 글은 존재하지 않습니다.\n", id);
+	                    	continue;
+	                 }
+	                 System.out.println("== 게시물 삭제 ==");
+	                 sql.append("DELTE FROM article");
+	                 sql.append("WHERE id = ?", id);     
+	                 
+	                 DBUtil.delete(conn, sql);
+	                 System.out.printf("%d번 글이 삭제되었습니다\n", id);
+				}else if(cmd.startsWith("article detail")) {
+					SecSql sql = new SecSql();
+					int id = Integer.parseInt(cmd.split(" ")[2]);
 
+                    sql.append("SELECT *");
+                    sql.append("FROM article");
+                    sql.append("WHERE id = ?", id);
+                    
+                    Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+                    
+                    if(articleMap.isEmpty()) {
+                    	System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+                    	continue;
+                    }
+                   
+                    System.out.printf("== %d번 게시물 상세보기 ==", id);
+                    
+                    Article article = new Article(articleMap);
+                    
+                    System.out.printf("번호 : %d\n", article.id);
+            		System.out.printf("작성 날짜 : %s\n", article.regDate);
+            		System.out.printf("수정 날짜 : %s\n", article.updateDate);
+            		System.out.printf("제목 : %s\n", article.title);
+            		System.out.printf("내용 : %s\n", article.body);
+            		
+				
+				}
 				if (cmd.equals("exit")) {
 					System.out.println("== 프로그램 종료 ==");
 					break;
