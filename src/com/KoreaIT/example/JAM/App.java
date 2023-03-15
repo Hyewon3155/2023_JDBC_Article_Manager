@@ -3,15 +3,11 @@ package com.KoreaIT.example.JAM;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import com.KoreaIT.example.JAM.controller.MemberController;
 import com.KoreaIT.example.JAM.controller.ArticleController;
-import com.KoreaIT.example.JAM.util.DBUtil;
-import com.KoreaIT.example.JAM.util.SecSql;
+
 
 public class App {
 	public void run() {
@@ -36,13 +32,13 @@ public class App {
 				   memberController.doJoin();	
 				}
 				if (cmd.equals("article write")) {
-					articleController.showWrite();
+					articleController.doWrite();
 				} else if (cmd.equals("article list")) {
 					articleController.showList();
 				} else if (cmd.startsWith("article modify ")) {
-                    articleController.showModify(cmd);
+                    articleController.doModify(cmd);
 				} else if (cmd.startsWith("article delete")) {
-					articleController.showDelete(cmd);
+					articleController.doDelete(cmd);
 				}else if(cmd.startsWith("article detail")) {
 					articleController.showDetail(cmd);
 				} else {
