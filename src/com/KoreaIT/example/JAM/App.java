@@ -30,6 +30,10 @@ public class App {
                 
 				if(cmd.startsWith("member join")) {
 				   memberController.doJoin();	
+				} else if(cmd.startsWith("member login")) {
+					memberController.doLogin();
+				} else if(cmd.startsWith("member logout")) {
+					memberController.doLogout();
 				}
 				if (cmd.equals("article write")) {
 					articleController.doWrite();
