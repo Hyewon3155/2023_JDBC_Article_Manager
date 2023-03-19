@@ -9,6 +9,10 @@ public class Article {
 		public LocalDateTime updateDate;
 		public String title;
 		public String body;
+		public String writerName;
+		public int memberId;
+		public int vCnt;
+		
 	    public Article(int id, String title, String body){
 			this.id = id;
 			this.title = title;
@@ -21,6 +25,10 @@ public class Article {
 			this.updateDate = (LocalDateTime) articleMap.get("updateDate");
 			this.title = (String) articleMap.get("title");
 			this.body = (String) articleMap.get("body");
+	        this.writerName = (String) articleMap.get("writerName");
+	        this.memberId = (int) articleMap.get("memberId");
+	        this.vCnt = (int) articleMap.get("vCnt");
+			
 		}
 
 		@Override

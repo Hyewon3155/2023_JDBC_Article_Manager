@@ -28,22 +28,23 @@ public class App {
 				System.out.printf("명령어) ");
 				String cmd = sc.nextLine().trim();
                 
-				if(cmd.startsWith("member join")) {
+				if(cmd.equals("member join")) {
 				   memberController.doJoin();	
-				} else if(cmd.startsWith("member login")) {
+				} else if(cmd.equals("member login")) {
 					memberController.doLogin();
-				} else if(cmd.startsWith("member logout")) {
+				} else if(cmd.equals("member logout")) {
 					memberController.doLogout();
-				}
-				if (cmd.equals("article write")) {
+				} else if(cmd.equals("member profile")) {
+					memberController.showProfile();
+				} else if (cmd.equals("article write")) {
 					articleController.doWrite();
-				} else if (cmd.equals("article list")) {
-					articleController.showList();
+				} else if (cmd.startsWith("article list ")) {
+					articleController.showList(cmd);
 				} else if (cmd.startsWith("article modify ")) {
                     articleController.doModify(cmd);
-				} else if (cmd.startsWith("article delete")) {
+				} else if (cmd.startsWith("article delete ")) {
 					articleController.doDelete(cmd);
-				}else if(cmd.startsWith("article detail")) {
+				}else if(cmd.startsWith("article detail ")) {
 					articleController.showDetail(cmd);
 				} else {
 					System.out.println("존재하지 않는 명령어입니다");

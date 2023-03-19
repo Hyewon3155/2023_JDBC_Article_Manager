@@ -15,7 +15,7 @@ public class ArticleDao {
 		this.conn = conn;
 	}
 
-	public int doWrite(String title, String body) {
+	public int doWrite(String title, String body, int loginedMemberId) {
 		
 		SecSql sql = new SecSql();
 
@@ -24,16 +24,24 @@ public class ArticleDao {
 		sql.append(", updateDate = NOW()");
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
+	    sql.append(", memberId = ?", loginedMemberId);
 		
 		return DBUtil.insert(conn, sql);
 	}
 	
-	public List<Map<String, Object>> getArticles(){
+	public List<Map<String, Object>> getArticles(String searchKeyword){
 		SecSql sql = new SecSql();
 
-		sql.append("SELECT *");
-		sql.append("FROM article");
-		sql.append("ORDER BY id DESC");
+		sql.append("SELECT A.*, M.name AS writerName");
+		sql.append("FROM article AS A");
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON A.memberId = M.id");
+		if(searchKeyword.length() > 0) {
+			//그냥 %?% 이렇게 해주면 값이 제대로 전달되지 않음
+			//따라서 CONCAT을 사용하여 값이 제대로 전달되게 해서 문자열을 리턴받는다
+			sql.append("WHERE A.title LIKE CONCAT('%', ?, '%')", searchKeyword);
+		}
+		sql.append("ORDER BY A.id DESC");
 		
 		return DBUtil.selectRows(conn, sql);
 	}
@@ -41,9 +49,12 @@ public class ArticleDao {
 	public Map<String, Object> getArticle(int id) {
 		SecSql sql = new SecSql();
 
-		sql.append("SELECT *");
-		sql.append("FROM article");
-		sql.append("WHERE id = ?", id);
+		sql.append("SELECT A.*, M.name as writerName");
+		sql.append("FROM article AS A");
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON M.id = A.id");
+		sql.append("A.id = ?", id);
+		
 		
 		return DBUtil.selectRow(conn, sql);
 	}
@@ -78,5 +89,18 @@ public class ArticleDao {
 		
 		DBUtil.delete(conn, sql);
 	}
+
+	public int increaseVCnt(int id) {
+		SecSql sql = new SecSql();
+
+		sql.append("UPDATE article");
+		sql.append("SET vCnt = vCnt + 1");
+		sql.append("WHERE id = ?", id);
+		
+		return DBUtil.update(conn, sql);
+		
+	}
+	
+	
 
 }

@@ -144,7 +144,7 @@ public class MemberController {
 	}
 
 	public void doLogout() {
-		if(Session.isLogined() == false) {
+		if(Session.isLogined()) {
 			System.out.println("로그아웃 후 이용해주세요");
 		    return;
 		}
@@ -154,7 +154,7 @@ public class MemberController {
 	}
 
 	public void showProfile() {
-		if(Session.isLogined()) {
+		if(Session.isLogined() == false) {
 			System.out.println("로그인 후 이용해주세요");
 		    return;
 		}
